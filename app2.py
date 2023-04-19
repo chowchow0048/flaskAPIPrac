@@ -10,19 +10,6 @@ users = {
     '3': {'name': 'Arthur', 'age': 41},
 }
 
-# @app.route('/users', methods=['POST'])
-# def create_user():
-#     user_id = str(int(max(users.keys())) + 1)
-#     name = request.json['name']
-#     age = request.json['age']
-
-#     user = {'name': name, 'age': age}
-
-#     users[user_id] = user
-
-#     return jsonify({'id': user_id, 'name': name, 'age': age})
-
-@api.route('/user')
 class CreateUser(Resource):
     def post(self):
         user_id = str(int(max(users.keys())) + 1)
@@ -38,7 +25,6 @@ class CreateUser(Resource):
 
         return jsonify({'id': user_id, 'name': name, 'age': age})
     
-@api.route('/user/<user_id>')
 class ReadUser(Resource):
     def get(self, user_id):
         if user_id in users:
@@ -46,12 +32,10 @@ class ReadUser(Resource):
         else:
             return "ERR: NO SUCH USER"
 
-@api.route('/user/all')
 class ReadAllUsers(Resource):
     def get(self):
         return jsonify(users)
-    
-@api.route('/user/<user_id>')
+
 class UpdateUser(Resource):
     def put(self, user_id):
         if user_id in users:
@@ -65,7 +49,6 @@ class UpdateUser(Resource):
         else:
             return "ERR: NO SUCH USER"
         
-@api.route('/user/<user_id>')        
 class DeleteUser(Resource):
     def delete(self, user_id):
         if user_id in users:
@@ -73,6 +56,12 @@ class DeleteUser(Resource):
             return "USER SUCCESSFULY DELETED"
         else:
             return "ERR: NO SUCH USER"
+        
+api.add_resource(CreateUser, "/user")
+api.add_resource(ReadUser, "/user/<user_id>")
+api.add_resource(ReadAllUsers, "/user/all")
+api.add_resource(UpdateUser, "/user/<user_id>")
+api.add_resource(DeleteUser, "/user/<user_id>")
         
 if __name__ == '__main__':
     app.run(debug=True)
